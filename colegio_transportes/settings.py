@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'colegio_transportes.wsgi.application'
 
 
 
-database_url = os.environ.get('postgres://transporte_colegio_user:6l47bfJiJQftPFE6A7fS08RmRKDZ9b60@dpg-ch8mlojhp8u8ortova50-a/transporte_colegio')
+database_url = os.environ.get('DATABASE_URL')
 parsed_database_url = urlparse(database_url)
 
 DATABASES = {
