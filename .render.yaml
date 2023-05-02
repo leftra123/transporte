@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: colegio-transportes
+    env: docker
+    build:
+      dockerfile: Dockerfile
+    port: 8000
+    healthCheckPath: /ruta/healthcheck
+    envVars:
+      - key: POSTGRES_DATABASE
+        fromDatabase:
+          name: colegio-transportes-db
+          property: dbName
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: colegio-transportes-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: colegio-transportes-db
+          property: password
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: colegio-transportes-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: colegio-transportes-db
+          property: port
+
+databases:
+  - name: colegio-transportes-db
+    engine: postgres
