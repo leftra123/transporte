@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+from urllib.parse import urlparse
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -78,12 +79,20 @@ WSGI_APPLICATION = 'colegio_transportes.wsgi.application'
 
 
 
+database_url = os.environ.get('postgres://transporte_colegio_user:6l47bfJiJQftPFE6A7fS08RmRKDZ9b60@dpg-ch8mlojhp8u8ortova50-a/transporte_colegio')
+parsed_database_url = urlparse(database_url)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['POSTGRES_DATABASE'],
+        'NAME': parsed_database_url.path[1:],
+        'USER': parsed_database_url.username,
+        'PASSWORD': parsed_database_url.password,
+        'HOST': parsed_database_url.hostname,
+        'PORT': parsed_database_url.port,
     }
 }
+
 
 
 
