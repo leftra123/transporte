@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,21 +79,36 @@ LOGIN_URL = 'login'
 WSGI_APPLICATION = 'colegio_transportes.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'transporte_colegio',
         'USER': 'transporte_colegio_user',
         'PASSWORD': '6l47bfJiJQftPFE6A7fS08RmRKDZ9b60',
-        'HOST': 'transporte-tp01.onrender.com',
+        'HOST': 'dpg-ch8mlojhp8u8ortova50-a.oregon-postgres.render.com',
         'PORT': '5432',
     }
 }
 
 
+# db_from_env = dj_database_url.config()
+# DATABASES['default'].update(db_from_env)
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('POSTGRES_DB'),
+#         'USER': os.environ.get('POSTGRES_USER'),
+#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+#         'HOST': os.environ.get('POSTGRES_HOST'),
+#         'PORT': os.environ.get('POSTGRES_PORT'),
+#     }
+# }
+
+# Configuración de la conexión a la base de datos desde la variable de entorno DATABASE_URL
+# db_from_env = dj_database_url.config()
+# DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
