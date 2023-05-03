@@ -31,3 +31,13 @@ class EscuelaForm(forms.ModelForm):
     class Meta:
         model = Escuela
         fields = '__all__'
+        widgets = {
+            'rbd': forms.NumberInput(attrs={'class': 'form-control'}),
+            'digito_verificador': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'rbd': 'RBD',
+            'digito_verificador': 'Dígito Verificador',
+            'nombre': 'Nombre',
+        }

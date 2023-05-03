@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
-from urllib.parse import urlparse
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -70,6 +69,7 @@ TEMPLATES = [
         },
     },
 ]
+LOGIN_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'colegio_transportes.wsgi.application'
 
@@ -77,22 +77,16 @@ WSGI_APPLICATION = 'colegio_transportes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-
-
-database_url = os.environ.get('DATABASE_URL')
-parsed_database_url = urlparse(database_url)
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': parsed_database_url.path[1:],
-        'USER': parsed_database_url.username,
-        'PASSWORD': parsed_database_url.password,
-        'HOST': parsed_database_url.hostname,
-        'PORT': parsed_database_url.port,
+        'NAME': 'transporte_colegio',
+        'USER': 'transporte_colegio_user',
+        'PASSWORD': '6l47bfJiJQftPFE6A7fS08RmRKDZ9b60',
+        'HOST': 'dpg-ch8mlojhp8u8ortova50-a',
+        'PORT': '5432',
     }
 }
-
 
 
 
@@ -131,6 +125,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -1,21 +1,20 @@
-# Use una imagen oficial de Python como base
-FROM python:3.9
+# Use the official Python image as base
+FROM python:3.9-slim
 
-# Establece la variable de entorno para que Python use utf-8
-ENV PYTHONUNBUFFERED=1
-
-# Establece el directorio de trabajo
+# Set the working directory
 WORKDIR /app
 
-# Instala las dependencias del proyecto
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy requirements.txt into the container
+COPY requirements.txt .
 
-# Copia el código del proyecto
-COPY . /app/
+# Install dependencies
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-# Expone el puerto en el que se ejecutará el servidor
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port the app will run on
 EXPOSE 8000
 
-# Ejecuta el servidor de Django
-CMD ["gunicorn", "colegio_transportes.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+# Run the command to start the app
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "colegio_transportes.wsgi:application"]

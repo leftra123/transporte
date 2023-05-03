@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: colegio-transportes
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: colegio_transportes.settings
+      - key: DATABASE_URL
+        value: postgres://transporte_colegio_user:6l47bfJiJQftPFE6A7fS08RmRKDZ9b60@dpg-ch8mlojhp8u8ortova50-a/transporte_colegio
