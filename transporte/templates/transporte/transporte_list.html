@@ -83,28 +83,21 @@
       {% endfor %}
     </tbody>
   </table>
-  <div class="btn-group" role="group" aria-label="Exportar">
-    <div class="btn-group" role="group">
-      <button id="export-escuelas-btn" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar escuelas
-      </button>
-      <div class="dropdown-menu" aria-labelledby="export-escuelas-btn">
-        <a class="dropdown-item" href="{% url 'export_escuelas_csv' %}">CSV</a>
-        <a class="dropdown-item" href="{% url 'export_escuelas_excel' %}">Excel</a>
-        <a class="dropdown-item" href="{% url 'export_escuelas_pdf' %}">PDF</a>
-      </div>
-    </div>
-    <div class="btn-group" role="group">
-      <button id="export-transportes-btn" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar transportes
-      </button>
-      <div class="dropdown-menu" aria-labelledby="export-transportes-btn">
-        <a class="dropdown-item" href="{% url 'export_transportes_csv' %}">CSV</a>
-        <a class="dropdown-item" href="{% url 'export_transportes_excel' %}">Excel</a>
-        <a class="dropdown-item" href="{% url 'export_transportes_pdf' %}">PDF</a>
-      </div>
-    </div>
+  <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="exportarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+      Exportar
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="exportarDropdown">
+      <li><a class="dropdown-item" href="{% url 'export_escuelas_csv' %}">Exportar escuelas a CSV</a></li>
+      <li><a class="dropdown-item" href="{% url 'export_escuelas_excel' %}">Exportar escuelas a Excel</a></li>
+      <li><a class="dropdown-item" href="{% url 'export_escuelas_pdf' %}">Exportar escuelas a PDF</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="{% url 'export_transportes_csv' %}">Exportar transportes a CSV</a></li>
+      <li><a class="dropdown-item" href="{% url 'export_transportes_excel' %}">Exportar transportes a Excel</a></li>
+      <li><a class="dropdown-item" href="{% url 'export_transportes_pdf' %}">Exportar transportes a PDF</a></li>
+    </ul>
   </div>
+  
   
 
 {% endblock %}

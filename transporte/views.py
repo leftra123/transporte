@@ -9,9 +9,10 @@ from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
 from django.http import FileResponse
-from reportlab.lib.pagesizes import A4
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from datetime import datetime
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from io import BytesIO
 
 
 @login_required
@@ -82,7 +83,6 @@ def profile_view(request):
 # aqui van las funciones de exportar a excel, csv y pdf
 
 
-@login_required
 def export_escuelas_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="escuelas.csv"'
@@ -97,7 +97,6 @@ def export_escuelas_csv(request):
     return response
 
 
-@login_required
 def export_transportes_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="transportes.csv"'
@@ -114,7 +113,6 @@ def export_transportes_csv(request):
     return response
 
 
-@login_required
 def export_escuelas_excel(request):
     wb = Workbook()
     ws = wb.active
@@ -131,7 +129,6 @@ def export_escuelas_excel(request):
     return response
 
 
-@login_required
 def export_transportes_excel(request):
     wb = Workbook()
     ws = wb.active
@@ -151,54 +148,54 @@ def export_transportes_excel(request):
 
 
 def export_escuelas_pdf(request):
+    escuelas = Escuela.objects.all()
+    username = request.user.username
+    date_str = datetime.now().strftime('%d-%m-%Y')
+
+    template = get_template('informe/escuelas.html')
+    context = {
+        'escuelas': escuelas,
+        'username': username,
+        'date_str': date_str,
+    }
+    html = template.render(context)
+
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=escuelas.pdf'
 
-    doc = SimpleDocTemplate(response, pagesize=A4)
-    data = [['RBD', 'Digito Verificador', 'Nombre']]
+    pisa_status = pisa.CreatePDF(
+        html.encode('utf-8'), dest=response,
+        encoding='utf-8'
+    )
 
-    for escuela in Escuela.objects.all():
-        data.append([escuela.rbd, escuela.digito_verificador, escuela.nombre])
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF: %s' % pisa_status.err)
 
-    table = Table(data)
-    table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 14),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
-    ]))
-
-    doc.build([table])
     return response
 
 
 def export_transportes_pdf(request):
+    transportes = Transporte.objects.all()
+    username = request.user.username
+    date_str = datetime.now().strftime('%d-%m-%Y')
+
+    template = get_template('informe/transportes.html')
+    context = {
+        'transportes': transportes,
+        'username': username,
+        'date_str': date_str,
+    }
+    html = template.render(context)
+
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=transportes.pdf'
 
-    doc = SimpleDocTemplate(response, pagesize=A4)
-    data = [['Patente', 'Oferente', 'Cantidad KM',
-             'Alumnos', 'Sectores', 'Escuela', 'URL Mapa']]
+    pisa_status = pisa.CreatePDF(
+        html.encode('utf-8'), dest=response,
+        encoding='utf-8'
+    )
 
-    for transporte in Transporte.objects.all():
-        data.append([transporte.patente, transporte.oferente, transporte.cantidad_km,
-                    transporte.alumnos, transporte.sectores, transporte.escuela.nombre, transporte.url_mapa])
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF: %s' % pisa_status.err)
 
-    table = Table(data)
-    table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 14),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
-    ]))
-
-    doc.build([table])
     return response
