@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'transporte_colegio',
         'USER': 'transporte_colegio_user',
         'PASSWORD': '6l47bfJiJQftPFE6A7fS08RmRKDZ9b60',
-        'HOST': 'postgres://transporte_colegio_user:6l47bfJiJQftPFE6A7fS08RmRKDZ9b60@dpg-ch8mlojhp8u8ortova50-a.oregon-postgres.render.com/transporte_colegio',
+        'HOST': 'transporte-tp01.onrender.com',
         'PORT': '5432',
     }
 }
