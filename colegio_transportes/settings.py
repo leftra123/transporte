@@ -70,6 +70,8 @@ TEMPLATES = [
     },
 ]
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'login'
+
 
 WSGI_APPLICATION = 'colegio_transportes.wsgi.application'
 
