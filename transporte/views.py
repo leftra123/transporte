@@ -4,7 +4,8 @@ from .forms import TransporteForm
 from django.db.models import Q
 from .forms import EscuelaForm
 from django.contrib.auth.decorators import login_required
-
+import csv
+from django.http import HttpResponse
 @login_required
 def transporte_list(request):
     query = request.GET.get('q', '')
@@ -63,3 +64,29 @@ def escuela_create(request):
 @login_required
 def profile_view(request):
     return render(request, 'transporte_list.html')
+@login_required
+def export_escuelas_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="escuelas.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['RBD', 'Digito Verificador', 'Nombre'])
+
+    data = Escuela.objects.all().values_list('rbd', 'digito_verificador', 'nombre')
+    for row in data:
+        writer.writerow(row)
+
+    return response
+@login_required
+def export_transportes_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="transportes.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Patente', 'Oferente', 'Cantidad KM', 'Alumnos', 'Sectores', 'Escuela', 'URL Mapa'])
+
+    data = Transporte.objects.all().values_list('patente', 'oferente', 'cantidad_km', 'alumnos', 'sectores', 'escuela__nombre', 'url_mapa')
+    for row in data:
+        writer.writerow(row)
+
+    return response

@@ -7,5 +7,6 @@ urlpatterns = [
     path('update/<str:patente>/', views.transporte_update, name='transporte_update'),
     path('delete/<str:patente>/', views.transporte_delete, name='transporte_delete'),
     path('escuela/create/', views.escuela_create, name='escuela_create'),
-    # path('profile/', views.profile_view, name='profile_view'),
+    path('export/escuelas/csv/', views.export_escuelas_csv, name='export_escuelas_csv'),
+    path('export/transportes/csv/', views.export_transportes_csv, name='export_transportes_csv'),
 ]
