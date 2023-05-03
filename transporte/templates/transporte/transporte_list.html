@@ -83,9 +83,28 @@
       {% endfor %}
     </tbody>
   </table>
-  <a href="{% url 'export_escuelas_csv' %}" class="btn btn-primary">Exportar escuelas a CSV</a>
-<a href="{% url 'export_transportes_csv' %}" class="btn btn-primary">Exportar transportes a CSV</a>
-<a href="{% url 'export_escuelas_excel' %}" class="btn btn-primary">Exportar escuelas a Excel</a>
-<a href="{% url 'export_transportes_excel' %}" class="btn btn-primary">Exportar transportes a Excel</a>
+  <div class="btn-group" role="group" aria-label="Exportar">
+    <div class="btn-group" role="group">
+      <button id="export-escuelas-btn" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Exportar escuelas
+      </button>
+      <div class="dropdown-menu" aria-labelledby="export-escuelas-btn">
+        <a class="dropdown-item" href="{% url 'export_escuelas_csv' %}">CSV</a>
+        <a class="dropdown-item" href="{% url 'export_escuelas_excel' %}">Excel</a>
+        <a class="dropdown-item" href="{% url 'export_escuelas_pdf' %}">PDF</a>
+      </div>
+    </div>
+    <div class="btn-group" role="group">
+      <button id="export-transportes-btn" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Exportar transportes
+      </button>
+      <div class="dropdown-menu" aria-labelledby="export-transportes-btn">
+        <a class="dropdown-item" href="{% url 'export_transportes_csv' %}">CSV</a>
+        <a class="dropdown-item" href="{% url 'export_transportes_excel' %}">Excel</a>
+        <a class="dropdown-item" href="{% url 'export_transportes_pdf' %}">PDF</a>
+      </div>
+    </div>
+  </div>
+  
 
 {% endblock %}
