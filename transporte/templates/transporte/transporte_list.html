@@ -83,7 +83,7 @@
       {% endfor %}
     </tbody>
   </table>
-  <div class="dropdown">
+  {% comment %} <div class="dropdown">
     <button class="btn btn-primary dropdown-toggle" type="button" id="exportarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
       Exportar
     </button>
@@ -96,7 +96,7 @@
       <li><a class="dropdown-item" href="{% url 'export_transportes_excel' %}">Exportar transportes a Excel</a></li>
       <li><a class="dropdown-item" href="{% url 'export_transportes_pdf' %}">Exportar transportes a PDF</a></li>
     </ul>
-  </div>
+  </div> {% endcomment %}
   
   
 

@@ -83,119 +83,119 @@ def profile_view(request):
 # aqui van las funciones de exportar a excel, csv y pdf
 
 
-def export_escuelas_csv(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="escuelas.csv"'
+# def export_escuelas_csv(request):
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = 'attachment; filename="escuelas.csv"'
 
-    writer = csv.writer(response)
-    writer.writerow(['RBD', 'Digito Verificador', 'Nombre'])
+#     writer = csv.writer(response)
+#     writer.writerow(['RBD', 'Digito Verificador', 'Nombre'])
 
-    data = Escuela.objects.all().values_list('rbd', 'digito_verificador', 'nombre')
-    for row in data:
-        writer.writerow(row)
+#     data = Escuela.objects.all().values_list('rbd', 'digito_verificador', 'nombre')
+#     for row in data:
+#         writer.writerow(row)
 
-    return response
-
-
-def export_transportes_csv(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="transportes.csv"'
-
-    writer = csv.writer(response)
-    writer.writerow(['Patente', 'Oferente', 'Cantidad KM',
-                    'Alumnos', 'Sectores', 'Escuela', 'URL Mapa'])
-
-    data = Transporte.objects.all().values_list('patente', 'oferente', 'cantidad_km',
-                                                'alumnos', 'sectores', 'escuela__nombre', 'url_mapa')
-    for row in data:
-        writer.writerow(row)
-
-    return response
+#     return response
 
 
-def export_escuelas_excel(request):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Escuelas"
+# def export_transportes_csv(request):
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = 'attachment; filename="transportes.csv"'
 
-    ws.append(['RBD', 'Digito Verificador', 'Nombre'])
+#     writer = csv.writer(response)
+#     writer.writerow(['Patente', 'Oferente', 'Cantidad KM',
+#                     'Alumnos', 'Sectores', 'Escuela', 'URL Mapa'])
 
-    for escuela in Escuela.objects.all():
-        ws.append([escuela.rbd, escuela.digito_verificador, escuela.nombre])
+#     data = Transporte.objects.all().values_list('patente', 'oferente', 'cantidad_km',
+#                                                 'alumnos', 'sectores', 'escuela__nombre', 'url_mapa')
+#     for row in data:
+#         writer.writerow(row)
 
-    response = HttpResponse(save_virtual_workbook(
-        wb), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=escuelas.xlsx'
-    return response
-
-
-def export_transportes_excel(request):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Transportes"
-
-    ws.append(['Patente', 'Oferente', 'Cantidad KM',
-              'Alumnos', 'Sectores', 'Escuela', 'URL Mapa'])
-
-    for transporte in Transporte.objects.all():
-        ws.append([transporte.patente, transporte.oferente, transporte.cantidad_km,
-                  transporte.alumnos, transporte.sectores, transporte.escuela.nombre, transporte.url_mapa])
-
-    response = HttpResponse(save_virtual_workbook(
-        wb), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=transportes.xlsx'
-    return response
+#     return response
 
 
-def export_escuelas_pdf(request):
-    escuelas = Escuela.objects.all()
-    username = request.user.username
-    date_str = datetime.now().strftime('%d-%m-%Y')
+# def export_escuelas_excel(request):
+#     wb = Workbook()
+#     ws = wb.active
+#     ws.title = "Escuelas"
 
-    template = get_template('informe/escuelas.html')
-    context = {
-        'escuelas': escuelas,
-        'username': username,
-        'date_str': date_str,
-    }
-    html = template.render(context)
+#     ws.append(['RBD', 'Digito Verificador', 'Nombre'])
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=escuelas.pdf'
+#     for escuela in Escuela.objects.all():
+#         ws.append([escuela.rbd, escuela.digito_verificador, escuela.nombre])
 
-    pisa_status = pisa.CreatePDF(
-        html.encode('utf-8'), dest=response,
-        encoding='utf-8'
-    )
-
-    if pisa_status.err:
-        return HttpResponse('Error al generar el PDF: %s' % pisa_status.err)
-
-    return response
+#     response = HttpResponse(save_virtual_workbook(
+#         wb), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+#     response['Content-Disposition'] = 'attachment; filename=escuelas.xlsx'
+#     return response
 
 
-def export_transportes_pdf(request):
-    transportes = Transporte.objects.all()
-    username = request.user.username
-    date_str = datetime.now().strftime('%d-%m-%Y')
+# def export_transportes_excel(request):
+#     wb = Workbook()
+#     ws = wb.active
+#     ws.title = "Transportes"
 
-    template = get_template('informe/transportes.html')
-    context = {
-        'transportes': transportes,
-        'username': username,
-        'date_str': date_str,
-    }
-    html = template.render(context)
+#     ws.append(['Patente', 'Oferente', 'Cantidad KM',
+#               'Alumnos', 'Sectores', 'Escuela', 'URL Mapa'])
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=transportes.pdf'
+#     for transporte in Transporte.objects.all():
+#         ws.append([transporte.patente, transporte.oferente, transporte.cantidad_km,
+#                   transporte.alumnos, transporte.sectores, transporte.escuela.nombre, transporte.url_mapa])
 
-    pisa_status = pisa.CreatePDF(
-        html.encode('utf-8'), dest=response,
-        encoding='utf-8'
-    )
+#     response = HttpResponse(save_virtual_workbook(
+#         wb), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+#     response['Content-Disposition'] = 'attachment; filename=transportes.xlsx'
+#     return response
 
-    if pisa_status.err:
-        return HttpResponse('Error al generar el PDF: %s' % pisa_status.err)
 
-    return response
+# def export_escuelas_pdf(request):
+#     escuelas = Escuela.objects.all()
+#     username = request.user.username
+#     date_str = datetime.now().strftime('%d-%m-%Y')
+
+#     template = get_template('informe/escuelas.html')
+#     context = {
+#         'escuelas': escuelas,
+#         'username': username,
+#         'date_str': date_str,
+#     }
+#     html = template.render(context)
+
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename=escuelas.pdf'
+
+#     pisa_status = pisa.CreatePDF(
+#         html.encode('utf-8'), dest=response,
+#         encoding='utf-8'
+#     )
+
+#     if pisa_status.err:
+#         return HttpResponse('Error al generar el PDF: %s' % pisa_status.err)
+
+#     return response
+
+
+# def export_transportes_pdf(request):
+#     transportes = Transporte.objects.all()
+#     username = request.user.username
+#     date_str = datetime.now().strftime('%d-%m-%Y')
+
+#     template = get_template('informe/transportes.html')
+#     context = {
+#         'transportes': transportes,
+#         'username': username,
+#         'date_str': date_str,
+#     }
+#     html = template.render(context)
+
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename=transportes.pdf'
+
+#     pisa_status = pisa.CreatePDF(
+#         html.encode('utf-8'), dest=response,
+#         encoding='utf-8'
+#     )
+
+#     if pisa_status.err:
+#         return HttpResponse('Error al generar el PDF: %s' % pisa_status.err)
+
+#     return response
